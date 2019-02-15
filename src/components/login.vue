@@ -1,14 +1,14 @@
 <template>
     <div class="login-wrap">
-        <el-form label-position="top" label-width="80px" :model="formData" class="login-form">
+        <el-form label-position="top" label-width="80px" :model="fromdata" class="login-form">
             <h2>用户登录</h2>
             <el-form-item label="用户名">
-                <el-input v-model="formData.name"></el-input>
+                <el-input v-model="fromdata.username"></el-input>
             </el-form-item>
             <el-form-item label="密码">
-                <el-input v-model="formData.password"></el-input>
+                <el-input v-model="fromData.password"></el-input>
             </el-form-item>
-            <el-button type="primary" class="login-button">登录</el-button>
+            <el-button @click.prevent="handlelogin()" type="primary" class="login-button">登录</el-button>
         </el-form>
     </div>
 </template>
@@ -17,13 +17,21 @@
 export default {
   data() {
     return {
-      formData: {
+      fromData: {
         username: "",
         password: ""
       }
-    };
+    }
+  },
+  methods: {
+    handlelogin() {
+      //登录请求
+      this.$http.post(`login`, this.fromdata).then((res) => {
+        console.log(res);
+      })
+    }
   }
-};
+}
 </script>
 
 <style>
@@ -33,15 +41,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 .login-form {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    width: 400px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
 }
-.login-wrap,.login-button {
-    width: 100%;
+.login-wrap,
+.login-button {
+  width: 100%;
 }
 </style>
