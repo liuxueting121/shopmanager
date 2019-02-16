@@ -1,9 +1,9 @@
 <template>
     <div class="login-wrap">
-        <el-form label-position="top" label-width="80px" :model="fromdata" class="login-form">
+        <el-form label-position="top" label-width="80px" :model="fromData" class="login-form">
             <h2>用户登录</h2>
             <el-form-item label="用户名">
-                <el-input v-model="fromdata.username"></el-input>
+                <el-input v-model="fromData.username"></el-input>
             </el-form-item>
             <el-form-item label="密码">
                 <el-input v-model="fromData.password"></el-input>
@@ -14,21 +14,33 @@
 </template>
 
 <script>
+
 export default {
-  data() {
+  data () {
     return {
       fromData: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       }
     }
   },
   methods: {
-    handlelogin() {
-      //登录请求
-      this.$http.post(`login`, this.fromdata).then((res) => {
-        console.log(res);
-      })
+    handlelogin () {
+      this.$http
+        .post(`login`, this.fromData)
+        .then((res) => {
+          console.log(res)
+          const {data:{
+            data,meta:{msg,status}
+          }} = res
+          if (status===200) {
+            console.log('login---success---');
+          }else {
+            console.log('error----')
+
+            
+          }
+        })
     }
   }
 }
