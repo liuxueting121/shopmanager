@@ -1,66 +1,65 @@
 <template>
-    <div class="login-wrap">
-        <el-form label-position="top" label-width="80px" :model="fromData" class="login-form">
-            <h2>用户登录</h2>
-            <el-form-item label="用户名">
-                <el-input v-model="fromData.username"></el-input>
-            </el-form-item>
-            <el-form-item label="密码">
-                <el-input v-model="fromData.password"></el-input>
-            </el-form-item>
-            <el-button @click.prevent="handlelogin()" type="primary" class="login-button">登录</el-button>
-        </el-form>
-    </div>
+  <div class="login-wrap">
+    <el-form label-position="top" label-width="80px" :model="fromData" class="login-form">
+      <h2>用户登录</h2>
+      <el-form-item label="用户名">
+        <el-input v-model="fromData.username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="fromData.password"></el-input>
+      </el-form-item>
+      <el-button @click.prevent="handlelogin()" type="primary" class="login-button">登录</el-button>
+    </el-form>
+  </div>
 </template>
 
 <script>
-
 export default {
-  data () {
+  data() {
     return {
       fromData: {
-        username: '',
-        password: ''
+        username: "",
+        password: ""
       }
-    }
+    };
   },
-<<<<<<< HEAD
   methods: {
-    handlelogin () {
-      this.$http
-        .post(`login`, this.fromData)
-        .then((res) => {
-          console.log(res)
-          const {data:{
-            data,meta:{msg,status}
-          }} = res
-          if (status===200) {
-            console.log('login---success---');
-          }else {
-            console.log('error----')
+    async handlelogin() {
+      const res = await this.$http.post(`login`, this.fromData);
+      // console.log(res);
+      const { 
+        data: { 
+          data, 
+          meta: { msg, status } 
+          } 
+        } = res;
 
-            
-=======
-  methods :{
-    handlelogin() {
-      this.$http
-        .post(`login`,this.fromData)
-        .then((res)=> {
-          console.log(res)
-          const {data:{
-            data,meta:{msg,status}
-          }}=res
-          if (status===200) {
-            console.log('login---succes--');
-          }else {
-            
-            this.$message.error(msg);
->>>>>>> dev-login
-          }
-        })
+      if (status === 200) {
+        //渲染home.vue<-改标识/<-js代码编程导航$router
+        this.$router.push({
+          name: "home"
+        });
+      } else {
+        this.$message.error(msg);
+      }
+
+      // .then((res) => {
+      //   console.log(res)
+      //   const {data:{
+      //     data,meta:{msg,status}
+      //   }} = res
+      //   if (status===200) {
+      //     //渲染home.vue<-改标识/<-js代码编程导航$router
+      //     this.$router.push({
+      //       name:'home'
+      //     })
+      //   }else {
+      //     this.$message.error(msg);
+      //   }
+      // })
     }
   }
-}
+};
 </script>
 
 <style>
