@@ -29,12 +29,13 @@ export default {
       // console.log(res);
       const { 
         data: { 
-          data, 
+          data:{token}, 
           meta: { msg, status } 
           } 
         } = res;
 
       if (status === 200) {
+        localStorage.setItem('abc',token);
         //渲染home.vue<-改标识/<-js代码编程导航$router
         this.$router.push({
           name: "home"
