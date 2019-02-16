@@ -24,6 +24,7 @@ export default {
       }
     }
   },
+<<<<<<< HEAD
   methods: {
     handlelogin () {
       this.$http
@@ -39,6 +40,22 @@ export default {
             console.log('error----')
 
             
+=======
+  methods :{
+    handlelogin() {
+      this.$http
+        .post(`login`,this.fromData)
+        .then((res)=> {
+          console.log(res)
+          const {data:{
+            data,meta:{msg,status}
+          }}=res
+          if (status===200) {
+            console.log('login---succes--');
+          }else {
+            
+            this.$message.error(msg);
+>>>>>>> dev-login
           }
         })
     }
