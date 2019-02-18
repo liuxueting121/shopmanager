@@ -13,10 +13,12 @@
         <!-- 搜索框 -->
         <el-row>
             <el-col>
-                <el-input placeholder="请输入内容" class="searchbox">
-                    <el-button slot="append" icon="el-icon-search"></el-button>
+                <el-input 
+                @click="getAllUsers()"
+                placeholder="请输入内容" class="searchbox" v-model="query">
+                    <el-button @click="searchUsers()" slot="append" icon="el-icon-search"></el-button>
                 </el-input>
-                <el-button type="primary">添加用户</el-button>
+                <el-button  type="primary">添加用户</el-button>
             </el-col>
         </el-row>
 
@@ -75,6 +77,17 @@ export default {
     this.getTableData();
   },
   methods: {
+      //清空时获取所有用户
+      getAllUsers(){
+          this.getTableData();
+      },
+
+      //搜索用户
+      searchUsers(){
+          this.pagenum = 1;
+          this.getTableData();
+
+      },
 
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
