@@ -23,22 +23,10 @@
         <!-- 表格 -->
 
         <el-table :data="list" style="width: 100%">
-            <el-table-column prop="id" label="#" width="80"></el-table-column>
+            <el-table-column prop="id" type="index" label="#" width="80"></el-table-column>
             <el-table-column prop="username" label="姓名" width="100"></el-table-column>
             <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
             <el-table-column prop="mobile" label="电话" width="140"></el-table-column>
-<<<<<<< HEAD
-            <!-- 过滤器fmtdate -->
-            <!--  如果单元格的内容不是prop的值，需要给单元内容的外层加template-->
-            <!-- template有一个属性slot-scope ="外层数据"-->
-            <el-table-column  label="创建日期" width="200">
-                <!-- 内层 list.row 表示的是list的每个对象-->
-                <template slot-scope="scope">
-                    {{scope.row.create_time|fmtdate}}
-                </template>   
-            </el-table-column>
-            <el-table-column prop="name" label="用户状态" width="120"></el-table-column>
-=======
             <el-table-column prop="create_time" label="创建日期" width="200"></el-table-column>
             <el-table-column label="用户状态" width="120">
                 <template slot-scope="scope">
@@ -48,18 +36,13 @@
                 </template>
 
             </el-table-column>
-<<<<<<< HEAD
->>>>>>> dev-users
-            <el-table-column prop="name" label="操作" width="200"></el-table-column>
-=======
             <el-table-column  label="操作" width="200">
                 <template slot-scope="scope">
-                    <el-button type="primary" icon="el-icon-edit" size="mini" plain circle></el-button>
-                    <el-button type="danger" icon="el-icon-delete" size="mini" plain circle></el-button>
-                    <el-button type="success" icon="el-icon-check" size="mini" plain circle></el-button>
+                    <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
+                    <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
                 </template>
             </el-table-column>
->>>>>>> dev-users
         </el-table>
 
     </el-card>
