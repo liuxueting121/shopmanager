@@ -13,9 +13,7 @@
         <!-- 搜索框 -->
         <el-row>
             <el-col>
-                <el-input 
-                @click="getAllUsers()"
-                placeholder="请输入内容" class="searchbox" v-model="query">
+                <el-input @click="getAllUsers()" placeholder="请输入内容" class="searchbox" v-model="query">
                     <el-button @click="searchUsers()" slot="append" icon="el-icon-search"></el-button>
                 </el-input>
                 <el-button @click="showDiaAdduser()" type="primary">添加用户</el-button>
@@ -29,7 +27,11 @@
             <el-table-column prop="username" label="姓名" width="100"></el-table-column>
             <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
             <el-table-column prop="mobile" label="电话" width="140"></el-table-column>
-            <el-table-column prop="create_time" label="创建日期" width="200"></el-table-column>
+            <el-table-column  label="创建日期" width="200">
+                <template slot-scope="scope">
+                    {{scope.row.create_time|fmtdate}}
+                </template>
+            </el-table-column>
             <el-table-column label="用户状态" width="120">
                 <template slot-scope="scope">
                     <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
@@ -41,45 +43,38 @@
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
-                    <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
+                    <el-button @click="showMsgBox(scope.row)" type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
                     <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
                 </template>
             </el-table-column>
         </el-table>
 
         <!-- 分页功能 -->
-        <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagenum"
-      :page-sizes="[2, 4, 6, 8]"
-      :page-size="2"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total">
-    </el-pagination>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="2" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
 
-    <!-- 添加功能 -->
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisibleAdd">
-  <el-form label-position="left" label-width="80px" :model="fromData" class="login-form">
-      <h2>用户登录</h2>
-      <el-form-item label="用户名">
-        <el-input v-model="fromData.username"></el-input>
-      </el-form-item>
-       <el-form-item label="密码">
-        <el-input v-model="fromData.password"></el-input>
-      </el-form-item>
-       <el-form-item label="邮箱">
-        <el-input v-model="fromData.email"></el-input>
-      </el-form-item>
-       <el-form-item label="电话">
-        <el-input v-model="fromData.mobile"></el-input>
-      </el-form-item>
-    </el-form>
-  <div slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisibleAdd = false">取 消</el-button>
-    <el-button type="primary" @click="addUser()">确 定</el-button>
-  </div>
-</el-dialog>
+        <!-- 添加功能 -->
+        <el-dialog title="收货地址" :visible.sync="dialogFormVisibleAdd">
+            <el-form label-position="left" label-width="80px" :model="fromData" class="login-form">
+                <h2>用户登录</h2>
+                <el-form-item label="用户名">
+                    <el-input v-model="fromData.username"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input v-model="fromData.password"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="fromData.email"></el-input>
+                </el-form-item>
+                <el-form-item label="电话">
+                    <el-input v-model="fromData.mobile"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisibleAdd = false">取 消</el-button>
+                <el-button type="primary" @click="addUser()">确 定</el-button>
+            </div>
+        </el-dialog>
     </el-card>
 </template>
 <script>
@@ -108,6 +103,27 @@ export default {
     this.getTableData();
   },
   methods: {
+    //   删除弹出确认框
+    showMsgBox(user){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+            const res = await this.$http.delete(`users/${user.id}`);
+            console.log(res);
+            
+            const {meta:{msg,status}} = res.data;
+            if (status===200) {
+                this.$message.success('删除成功');
+                this.pagenum = 1;
+                this.getTableData();
+            }
+        }).catch(() => {
+          this.$message.info('已取消删除');
+        });
+    },
+
     //   添加用户-发送请求
       async addUser(){
           const res = await this.$http.post(`users`,this.fromData);
