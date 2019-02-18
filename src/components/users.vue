@@ -36,7 +36,7 @@
                 </template>
 
             </el-table-column>
-            <el-table-column  label="操作" width="200">
+            <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
                     <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
@@ -45,6 +45,16 @@
             </el-table-column>
         </el-table>
 
+        <!-- 分页功能 -->
+        <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagenum"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="2"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
     </el-card>
 </template>
 <script>
@@ -55,7 +65,8 @@ export default {
       query: "",
       //分页功能-前提是接口必须支持分页-通常在接口url参数中有类似page的参数名
       pagenum: 1,
-      pagesize: 6,
+      pagesize: 2,
+      total:-1,
       //表格数据
       list: []
     };
@@ -64,6 +75,15 @@ export default {
     this.getTableData();
   },
   methods: {
+
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+
+
     async getTableData() {
       //  设置请求头
       // 设置发送请求时的请求头->axios库->找axios中有没有可以设置headers头部的API
@@ -79,6 +99,7 @@ export default {
       //   console.log(res);
       const { data, meta: { status, msg } } = res.data;
       if (status === 200) {
+        this.total = data.total;
         this.list = data.users;
         console.log(this.list);
       }
