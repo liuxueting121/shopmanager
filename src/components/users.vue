@@ -27,7 +27,7 @@
             <el-table-column prop="username" label="姓名" width="100"></el-table-column>
             <el-table-column prop="email" label="邮箱" width="140"></el-table-column>
             <el-table-column prop="mobile" label="电话" width="140"></el-table-column>
-            <el-table-column  label="创建日期" width="200">
+            <el-table-column label="创建日期" width="200">
                 <template slot-scope="scope">
                     {{scope.row.create_time|fmtdate}}
                 </template>
@@ -42,7 +42,7 @@
             </el-table-column>
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                    <el-button type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
+                    <el-button @click="showDiaEditUser(scope.row)" type="primary" icon="el-icon-edit" circle size="mini" plain></el-button>
                     <el-button @click="showMsgBox(scope.row)" type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
                     <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
                 </template>
@@ -54,7 +54,7 @@
         </el-pagination>
 
         <!-- 添加功能 -->
-        <el-dialog title="收货地址" :visible.sync="dialogFormVisibleAdd">
+        <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
             <el-form label-position="left" label-width="80px" :model="fromData" class="login-form">
                 <h2>用户登录</h2>
                 <el-form-item label="用户名">
@@ -75,6 +75,24 @@
                 <el-button type="primary" @click="addUser()">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 编辑用户 -->
+        <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
+            <el-form label-position="left" label-width="80px" :model="fromData" class="login-form">
+                <el-form-item label="用户名">
+                    <el-input v-model="fromData.username" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱">
+                    <el-input v-model="fromData.email"></el-input>
+                </el-form-item>
+                <el-form-item label="电话">
+                    <el-input v-model="fromData.mobile"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisibleEdit = false">取 消</el-button>
+                <el-button type="primary" @click="editUser()">确 定</el-button>
+            </div>
+        </el-dialog>
     </el-card>
 </template>
 <script>
@@ -90,6 +108,7 @@ export default {
       //表格数据
     //   添加用户数据
     dialogFormVisibleAdd :false,
+    dialogFormVisibleEdit :false,
     fromData:{
         username:'',
         password:'',
@@ -103,6 +122,26 @@ export default {
     this.getTableData();
   },
   methods: {
+      //编辑用户-显示对话框
+      async showDiaEditUser(user) {
+      this.dialogFormVisibleEdit = true;
+      const res = await this.$http.get(`users/${user.id}`);
+      this.fromData = res.data.data;
+    },
+    // 编辑用户-发出请求
+    async editUser(){
+        const res = await this.$http.put(`users/${this.fromData.id}`,this.fromData);
+        
+        const {meta: { msg, status }} = res.data;
+        console.log(res);
+        
+       if (status === 200) {
+        // 关闭对话框
+        this.dialogFormVisibleEdit = false;
+        // 更新表格
+        this.getTableData();
+      }
+    },
     //   删除弹出确认框
     showMsgBox(user){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
