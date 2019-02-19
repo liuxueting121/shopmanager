@@ -34,7 +34,7 @@
             </el-table-column>
             <el-table-column label="用户状态" width="120">
                 <template slot-scope="scope">
-                    <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
+                    <el-switch @change="changeState(scope.row)"  v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
                     </el-switch>
 
                 </template>
@@ -122,6 +122,16 @@ export default {
     this.getTableData();
   },
   methods: {
+      //修改用户状态
+      async changeState(user){
+          const res = await this.$http.put(`users/${user.id}/state/${user.mg_state}`);
+          const {meta:{msg,status}} = res.data;
+          if(status===200) {
+              this.$message.success(msg);
+          }
+          
+      },
+    
       //编辑用户-显示对话框
       async showDiaEditUser(user) {
       this.dialogFormVisibleEdit = true;
@@ -142,6 +152,8 @@ export default {
         this.getTableData();
       }
     },
+
+
     //   删除弹出确认框
     showMsgBox(user){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
