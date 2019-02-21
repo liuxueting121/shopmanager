@@ -108,7 +108,7 @@
                         :label="item.roleName"
                         :value="item.id" 
                         v-for = "(item,i) in roles" 
-                        :key="item.id"
+                        :key="i"
                         ></el-option>
                     </el-select>
                 </el-form-item>

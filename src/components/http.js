@@ -22,7 +22,9 @@ HttpSever.install = function (Vue) {
         // 如果请求时Login，直接发送请求
         if(config.url!=='login') {
             const AUTH_TOKEN = localStorage.getItem("token");
-            axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+            // axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+            // 给当前请求设置请求头
+            config.headers["Authorization"] = AUTH_TOKEN;
         }
         // 当请求不是Login，先加头部，然后继续发送请求
         
