@@ -44,6 +44,14 @@
                 </template>
             </el-table-column>
         </el-table>
+    <!-- 对话框-分配权限 -->
+    <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
+        <span>测试--</span>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+  </div>
+</el-dialog>
 
     </el-card>
 </template>
@@ -53,6 +61,7 @@ export default {
     data() {
         return {
             roles:[],
+            dialogFormVisible:false,
             defaultProps: {
                 label: "authName",
                 children:"children"
@@ -76,7 +85,9 @@ export default {
                 role.children = data;
             }
         },
-        showDiaSetRights(){},
+        showDiaSetRights(){
+            this.dialogFormVisible=true;
+        },
         async getRoles() {
             const res = await this.$http.get(`roles`);
             this.roles = res.data.data;
