@@ -71,7 +71,9 @@ export default {
                 // 提示
                 this.$message.success(msg);
                 // 更新S
-                this.getRoles();
+                // this.getRoles();
+                // 只更新当前角色的权限
+                role.children = data;
             }
         },
         showDiaSetRights(){},
