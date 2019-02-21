@@ -43,8 +43,6 @@ export default {
       console.log(res);
       const { meta: { msg, status }, data } = res.data;
       if (status === 200) {
-        console.log("请求发起---");
-        
         this.list = data;
       }
     },

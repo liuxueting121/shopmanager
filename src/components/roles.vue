@@ -5,6 +5,29 @@
         <el-button class="btn" >添加角色</el-button>
         <!-- 表格 -->
         <el-table :data="roles" style="width: 100%" height="400px">
+            <el-table-column type="expand">
+                <template slot-scope="scope">
+                    <el-row 
+                    class="level1"
+                    v-for="(item1,i) in scope.row.children" :key="i">
+                        <el-col :span="4">
+                            <el-tag closable type="danger">{{item1.authName}}</el-tag>
+                            <i class="el-icon-arrow-right"></i>
+                        </el-col>
+                        <el-col :span="20">
+                            <el-row class="level2" v-for="(item2,i) in item1.children" :key="i">
+                                <el-col :span="4">
+                                    <el-tag closable type="info">{{item2.authName}}</el-tag> 
+                                    <i class="el-icon-arrow-right"></i>
+                                </el-col>
+                                <el-col :span="20">
+                                    <el-tag closable type="warning" v-for="(item3,i) in item2.children" :key="i">{{item3.authName}}</el-tag>
+                                </el-col>
+                            </el-row>
+                        </el-col>
+                    </el-row>
+                </template>
+            </el-table-column>
             <el-table-column type="index" label="#" width="160"></el-table-column>
             <el-table-column prop="roleName" label="角色名称" width="200"></el-table-column>
             <el-table-column prop="roleDesc" label="角色描述" width="200"></el-table-column>
@@ -24,7 +47,11 @@
 export default {
     data() {
         return {
-            roles:[]
+            roles:[],
+            defaultProps: {
+                label: "authName",
+                children:"children"
+            }
         }
     },
     created() {
@@ -47,5 +74,8 @@ export default {
     }
     .btn {
         margin-top: 20px;
+    }
+    .level1,  .level2{
+        margin-bottom: 10px;
     }
 </style>
