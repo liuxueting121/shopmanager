@@ -17,7 +17,7 @@ export default {
     name:"cusBread",
     data() {
         return {
-
+            
         }
     },
     // level1和level2的值来源于外部，但是data的数据的值来源于自己本身
